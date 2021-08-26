@@ -93,7 +93,7 @@ router.get('/logout',(req,res)=>{
     res.status(200).send("User logged out");
 })
 
-app.use('/.netlify/functions/app', router); 
+app.use('/.netlify/functions/server', router); 
 
 module.exports = app;
 module.exports.handler = serverless(app);
