@@ -1,6 +1,7 @@
 const express=require("express");
 const app=express();
 const User=require('./models/Users');
+const Email=require('./models/Emails');
 const PORT=process.env.PORT||3000;
 require("./db/connect");
 const bcrypt=require("bcryptjs");
@@ -128,6 +129,25 @@ router.get('/getGoals',async (req,res)=>{
 })
 
 
+router.post('/storeEmail',async (req,res)=>{
+    try{
+        const data=new Email({
+            email:req.body.email
+        })
+        const emailData=await Email.findOne({email:req.body.email});
+        if(emailData)
+        {
+            return res.json({message:"Email already registered"})
+        }
+
+        const result=await data.save();
+        res.status(201).json({message:"Email registered successfully"})
+    }
+    catch(err){
+        console.log(err);
+        res.status(400).json({message:"Error storing email"})
+    }
+})
 
 
 
