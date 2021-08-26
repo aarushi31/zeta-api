@@ -24,7 +24,8 @@ router.post("/register",async (req,res)=>{
             email:req.body.email,
             phone:req.body.phone,
             password:req.body.password,
-            accType:req.body.accType
+            accType:req.body.accType,
+            dob:req.body.dob
         })
         console.log(req.body.email)
         const loginData=await User.findOne({email:req.body.email});
@@ -92,6 +93,43 @@ router.get('/logout',(req,res)=>{
     res.clearCookie("jwt",{path:'/'});
     res.status(200).send("User logged out");
 })
+
+
+router.post('/newGoal',async (req,res)=>{
+    try{
+        const email=req.body.email;
+        const goal=req.body.goal;
+        const goalStatus=req.body.status
+
+        const loginData=await User.findOne({email:req.body.email});
+        loginData.goals=loginData.goals.concat({goal:goal,status:goalStatus})
+
+        const result=await loginData.save();
+        res.status(201).json({message:"Goal added successfully"})
+        
+
+    }
+    catch(err){
+        console.log(err)
+        res.status(400).json({message:"Error creating goal"})
+    }
+})
+
+router.get('/getGoals',async (req,res)=>{
+    try{
+        const loginData=await User.findOne({email:req.body.email});
+        res.send(loginData.goals);
+    }
+    catch(err)
+    {
+        console.log(err);
+        res.status(400).json({message:"Error fetching goals"})
+    }
+})
+
+
+
+
 
 app.use('/.netlify/functions/server', router); 
 

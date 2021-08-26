@@ -25,13 +25,28 @@ const userSchema=new mongoose.Schema({
         minLength:10,
         maxLength:10
     },
+    dob:{
+        type:String,
+        required:true
+    },
     password:{
         type:String,
         required:true
     },
     accType:{
-        type:String
+        type:Number,
+        required:true
     },
+    goals:[
+        {
+            goal:{
+                type:String
+            },
+            status:{
+                type:Boolean
+            }
+        }
+    ],
     tokens:[
         {
             token:{
